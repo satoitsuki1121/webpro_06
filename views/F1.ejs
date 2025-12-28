@@ -1,0 +1,31 @@
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>F1 チーム一覧</title>
+</head>
+<body>
+    <h1>F1 2025 コンストラクター順位</h1>
+    
+    <table border="1">
+        <tr>
+            <th>順位</th>
+            <th>画像</th> <th>ポイント</th>
+            <th>チーム名</th>
+        </tr>
+        <% data.forEach((item) => { %>
+        <tr>
+            <td><%= item.id %></td>
+            
+            <td>
+                <img src="/<%= item.image %>" width="150">
+            </td>
+            
+            <td><%= item.code %></td>
+            <td><%= item.name %></td>
+        </tr>
+        <% }); %>
+    </table>
+</body>
+</html>

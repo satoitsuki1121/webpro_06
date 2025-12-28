@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>周年パレード</title>
+</head>
+<body>
+    <h1>歴代 ディズニーランド 周年パレード</h1>
+    
+    <table border="1">
+        <tr>
+            <th>登場順</th>
+            <th>画像</th> <th>周年</th>
+            <th>パレード名</th>
+        </tr>
+        <% data.forEach((item) => { %>
+        <tr>
+            <td><%= item.id %></td>
+            
+            <td>
+                <img src="/<%= item.image %>" width="150">
+            </td>
+            
+            <td><%= item.code %></td>
+            <td><%= item.name %></td>
+        </tr>
+        <% }); %>
+    </table>
+</body>
+</html>
