@@ -1,0 +1,69 @@
+\documentclass[uplatex,dvipdfmx,a4paper,11pt]{jlreq} % 日本語に適した設定に変更
+\usepackage[utf8]{inputenc}
+\usepackage{url}
+\usepackage{geometry}
+\usepackage{enumerate}
+
+% ページの余白設定
+\geometry{left=25mm,right=25mm,top=30mm,bottom=30mm}
+
+\title{Webアプリケーションシリーズ 利用者向け仕様書\\ \large --- F1・歴代GT-R・周年パレード案内 ---}
+\author{25G1058 佐藤樹}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{はじめに}
+本システムは，特定のテーマ（F1チーム，日産GT-R，ディズニーランドのパレード）に関する情報を一覧で確認したり，新しい情報を追加したりすることができるWebアプリケーションです．パソコンやスマートフォンのブラウザから，どなたでも簡単に操作することができます．
+
+\section{提供する3つのサービス}
+本システムでは，以下の3つの情報を閲覧・追加できます．
+
+\begin{enumerate}[1.]
+    \item \textbf{F1 2025 コンストラクター順位表} \\
+    最新のF1チームの順位，チーム名，チームロゴなどの情報を表示します．
+    \item \textbf{歴代 GT-R ギャラリー} \\
+    初代「ハコスカ」から最新のR35型，コンセプトカーまでの歴代モデルを表示します．
+    \item \textbf{ディズニーランド 周年パレード年表} \\
+    東京ディズニーランドの開園5周年から現在までの，歴代アニバーサリーパレードを表示します．
+\end{enumerate}
+
+\section{基本的な使いかた}
+
+\subsection{一覧画面を見る}
+ブラウザのURL入力欄に，以下の目的のURLを入力して「Enter」キーを押してください．
+
+\begin{itemize}
+    \item \textbf{F1の情報を知りたい場合}: \url{http://localhost:8080/F1}
+    \item \textbf{GT-Rの情報を知りたい場合}: \url{http://localhost:8080/GT}
+    \item \textbf{パレードの情報を知りたい場合}: \url{http://localhost:8080/TD}
+\end{itemize}
+
+画面には，写真，名称，関連するコード（ポイントや通称など）が表形式で分かりやすく表示されます．
+
+\subsection{新しいデータを追加する}
+情報を新しく登録したい場合は，URLの末尾に情報を書き加えることで追加が可能です．
+
+\paragraph{操作例（F1チームを追加する場合）}
+URLの後に，以下のルールで文字を付け加えます．
+\begin{quote}
+    \texttt{/F1\_add?id=11\&code=50\&name=新チーム\&image=public/image.jpg}
+\end{quote}
+これを入力して実行すると，自動的に一覧画面へ戻り，新しい情報が一番下に追加されます．
+
+\section{困ったときは}
+\begin{itemize}
+    \item \textbf{画像が表示されない}: インターネットの接続状況を確認するか，ページを再読み込みしてください．
+    \item \textbf{画面が真っ白になる}: 入力したURLが間違っている可能性があります．つづり（スペル）を再度ご確認ください．
+\end{itemize}
+
+\section{ソースコードの公開場所}
+本システムの設計図（ソースコード）は，以下のGitHubリポジトリにて公開されています．
+
+\begin{center}
+    \url{https://github.com/satoitsuki1121/webpro_06.git}
+\end{center}
+
+\end{document}
