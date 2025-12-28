@@ -1,0 +1,92 @@
+\documentclass[uplatex,dvipdfmx,a4paper,11pt]{jlreq}
+\usepackage[utf8]{inputenc}
+\usepackage{url}
+\usepackage{geometry}
+\usepackage{enumerate}
+\usepackage{listings}
+
+% プログラムコード表示用の設定
+\lstset{
+    basicstyle=\ttfamily\small,
+    frame=single,
+    breaklines=true,
+}
+
+\geometry{left=25mm,right=25mm,top=30mm,bottom=30mm}
+
+\title{Webアプリケーションシリーズ 管理者向け仕様書\\ \large --- システム構築・運用管理マニュアル ---}
+\author{25G1058 佐藤樹}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{システム概要}
+本システムは，Node.jsおよびExpressフレームワークを用いて構築された，3つの情報一覧サービス（F1チーム情報，歴代GT-R情報，ディズニー周年パレード情報）を統合管理するWebアプリケーションシステムです ．
+
+管理者は，1つのサーバープロセスを起動するだけで，これらすべてのサービスを同時に一般利用者へ提供することが可能です ．
+
+\section{動作環境と構成}
+
+\subsection{必要ソフトウェア}
+本システムを立ち上げるには，以下の環境が必要です．
+\begin{itemize}
+    \item \textbf{Node.js}: 実行エンジン
+    \item \textbf{npm}: パッケージ管理ツール
+    \item \textbf{Express}: Webアプリケーションフレームワーク 
+    \item \textbf{EJS}: テンプレートエンジン 
+\end{itemize}
+
+\subsection{ファイル構成}
+システムを構成する主なファイルは以下の通りです．
+\begin{itemize}
+    \item \texttt{app5.js}: サーバー本体（各サービスのルート定義とデータ管理） 
+    \item \texttt{views/F1.ejs}: F1一覧表示用テンプレート [cite: 1]
+    \item \texttt{views/GT.ejs}: GT-R一覧表示用テンプレート [cite: 9]
+    \item \texttt{views/TD.ejs}: パレード一覧表示用テンプレート [cite: 5]
+    \item \texttt{public/}: 画像ファイルなどの静的資産を格納するディレクトリ 
+\end{itemize}
+
+\section{システムのセットアップ}
+
+\subsection{依存ライブラリのインストール}
+サーバー上でターミナルを起動し，以下のコマンドを実行して必要なライブラリを準備します．
+\begin{lstlisting}
+npm install express ejs
+\end{lstlisting}
+
+\subsection{サーバーの起動}
+以下のコマンドを実行し，サーバーを立ち上げます．
+\begin{lstlisting}
+node app5.js
+\end{lstlisting}
+正常に起動すると，ターミナルに「Example app listening on port 8080!」と表示されます ．管理者は \url{http://localhost:8080/} を通じて各サービスへアクセスできます ．
+
+\section{データの管理}
+
+\subsection{初期データの設定}
+各サービスのデータは \texttt{app5.js} 内の変数（配列）として管理されています．
+\begin{itemize}
+    \item \textbf{F1チームデータ}: 変数 \texttt{team} 
+    \item \textbf{GT-Rデータ}: 変数 \texttt{car} 
+    \item \textbf{パレードデータ}: 変数 \texttt{pare} 
+\end{itemize}
+
+\subsection{実行中のデータ追加}
+管理者は，専用の追加用URL（エンドポイント）を介して，ブラウザから動的にデータを追加することができます ．
+\begin{itemize}
+    \item \textbf{F1}: \texttt{/F1\_add} 
+    \item \textbf{GT-R}: \texttt{/GT\_add} 
+    \item \textbf{パレード}: \texttt{/TD\_add} 
+\end{itemize}
+追加されたデータは，サーバーが稼働している間，各変数内に保持されます ．
+
+\section{保守・トラブルシューティング}
+\begin{itemize}
+    \item \textbf{画像の追加}: 新しい画像を登録する際は，\texttt{public} ディレクトリ内にファイルを配置し，データ登録時の \texttt{image} パラメータにパス（例: \texttt{public/new\_image.jpg}）を指定してください ．
+    \item \textbf{データの永続性}: 現在の仕様では，データはメモリ上の変数に保存されています ．サーバーを再起動すると，実行中に追加されたデータはリセットされ，プログラム内の初期値に戻る点に注意してください．
+    \item \textbf{厳格モード}: プログラムの品質維持のため，すべてのJSファイルの先頭に \texttt{"use strict";} を記述して管理してください．
+\end{itemize}
+
+\end{document}

@@ -1,0 +1,94 @@
+\documentclass[uplatex,dvipdfmx,a4paper,11pt]{jlreq}
+\usepackage[utf8]{inputenc}
+\usepackage{url}
+\usepackage{geometry}
+\usepackage{enumerate}
+\usepackage{listings}
+\usepackage{color}
+
+\lstset{
+    language=JavaScript,
+    basicstyle=\ttfamily\small,
+    keywordstyle=\color{blue},
+    stringstyle=\color{red},
+    commentstyle=\color{green},
+    frame=single,
+    breaklines=true,
+}
+
+\geometry{left=25mm,right=25mm,top=30mm,bottom=30mm}
+
+\title{開発者向け仕様書：歴代GT-Rシステム}
+\author{25G1058 佐藤 樹}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{システム概要}
+本プログラムは，日産GT-Rの歴代モデル情報を管理・表示するためのWebアプリケーションです．Expressによるサーバサイド処理とEJSテンプレートを組み合わせ，データの動的な表示と追加機能を実現しています．
+
+\section{データ構造}
+データはサーバ側の変数 \texttt{car}（オブジェクト配列）に格納されます．
+\begin{itemize}
+    \item \textbf{id}: 登場順を示す数値．
+    \item \textbf{code}: 車両の通称（「ハコスカ」等）を格納する文字列．
+    \item \textbf{name}: 正式な車種名を示す文字列．
+    \item \textbf{image}: 画像ファイルへのパス（\texttt{public/}配下）．
+\end{itemize}
+
+\section{リソースと機能詳細}
+本システムは，以下のHTTPメソッドとリソース名を用いて操作を定義しています．
+\begin{table}[h]
+\centering
+\begin{tabular}{|l|l|l|l|}
+\hline
+機能 & HTTPメソッド & リソース名 & 処理内容 \\ \hline
+一覧表示 & GET & \texttt{/GT} & 全データの抽出と一覧表示 \\ \hline
+データ追加 & GET & \texttt{/GT\_add} & クエリパラメータを用いた新規登録 \\ \hline
+データ削除 & DELETE (予定) & \texttt{/GT/:id} & 指定IDのデータ削除 \\ \hline
+データ編集 & PUT (予定) & \texttt{/GT/:id} & 指定IDのデータ更新 \\ \hline
+\end{tabular}
+\end{table}
+
+\section{ページ遷移と制御フロー}
+\subsection{遷移の仕組みとユーザー導線}
+利用者が \url{http://localhost:8080/GT} にアクセスすると一覧画面が描画されます．データの追加は \texttt{/GT\_add} を通じて行われます．車種名（または通称）をクリックするなどのアクションにより，詳細情報の取得や画面遷移が発生する構造となっています．
+\subsection{操作後の表示内容}
+追加・変更・削除の各操作が完了した後は，サーバ側で一覧画面へ強制的に遷移させます．これにより，利用者は常に最新のデータ状態を確認することが可能です．
+
+\section{授業で説明していない技術の概要と採用理由}
+本システムの開発にあたり，講義資料の範囲外で採用した技術について以下に記します．
+
+\begin{enumerate}[1.]
+    \item \textbf{REST API（設計思想）}
+    \begin{itemize}
+        \item \textbf{概要}: URLを「リソース（物）」として扱い，HTTPメソッドで操作を決定する設計手法です．
+        \item \textbf{採用理由}: 統一されたルールでURLを設計することで，プログラムの拡張性と可読性を高めるため採用しました．
+    \end{itemize}
+    
+    \item \textbf{res.redirect()（リダイレクト機能）}
+    \begin{itemize}
+        \item \textbf{概要}: 処理完了後，サーバからブラウザに対して別のURLへ再アクセスするように指示を出す機能です．
+        \item \textbf{採用理由}: データ追加後にスムーズに一覧画面へ戻るユーザー体験を提供し，二重登録などの誤作動を防ぐため採用しました．
+    \end{itemize}
+
+    \item \textbf{express.static（静的ファイル配信設定）}
+    \begin{itemize}
+        \item \textbf{概要}: サーバ上の特定のフォルダ内のファイルを，外部から直接参照可能にするミドルウェアです．
+        \item \textbf{採用理由}: 車両画像などの画像資産をEJSテンプレートから効率的に呼び出し，安定して表示させるために採用しました．
+    \end{itemize}
+
+    \item \textbf{"use strict";（厳格モード）}
+    \begin{itemize}
+        \item \textbf{概要}: JavaScriptの記述ミスをエラーとして検出しやすくする宣言です．
+        \item \textbf{採用理由}: プログラムの動作を安定させ，バグの混入を未然に防ぐ品質管理のために採用しました．
+    \end{itemize}
+\end{enumerate}
+
+\section{ソースコードの管理}
+本システムのソースコードは，以下のGitHubリポジトリで管理しています．\\
+\url{https://github.com/satoitsuki1121/webpro_06.git}
+
+\end{document}

@@ -91,7 +91,7 @@ app.get("/keiyo", (req, res) => {
 
 
 
-// ▼▼▼ 修正箇所 1：URLを "/F1" から "/F1_add" に変える（重要！） ▼▼▼
+
 app.get("/F1_add", (req, res) => {
   let id = req.query.id;
   let code = req.query.code;
@@ -100,7 +100,7 @@ app.get("/F1_add", (req, res) => {
   let newdata = { id: id, code: code, name: name, image: image };
   team.push( newdata );
   
-  // 処理が終わったら一覧画面(/F1)に戻る
+
   res.redirect("/F1");
 });
 
@@ -118,8 +118,7 @@ let team = [
 ];
 
 app.get("/F1", (req, res) => {
-  // ▼▼▼ 修正箇所 2：データを "station" ではなく "team" を渡す ▼▼▼
-  // ▼▼▼ 修正箇所 3：ファイル名を "db1" ではなく "F1" (作成したEJSファイル名) にする ▼▼▼
+
   res.render('F1', { data: team });
 });
 
@@ -131,7 +130,6 @@ app.get("/GT_add", (req, res) => {
   let newdata = { id: id, code: code, name: name, image: image };
   car.push( newdata );
   
-  // 処理が終わったら一覧画面(/F1)に戻る
   res.redirect("/GT");
 });
 
@@ -146,8 +144,7 @@ let car = [
 ];
 
 app.get("/GT", (req, res) => {
-  // ▼▼▼ 修正箇所 2：データを "station" ではなく "team" を渡す ▼▼▼
-  // ▼▼▼ 修正箇所 3：ファイル名を "db1" ではなく "F1" (作成したEJSファイル名) にする ▼▼▼
+
   res.render('GT', { data: car });
 });
 
@@ -160,7 +157,7 @@ app.get("/TD_add", (req, res) => {
   let newdata = { id: id, code: code, name: name, image: image };
   pare.push( newdata );
   
-  // 処理が終わったら一覧画面(/F1)に戻る
+
   res.redirect("/TD");
 });
 
@@ -176,8 +173,7 @@ let pare = [
 ];
 
 app.get("/TD", (req, res) => {
-  // ▼▼▼ 修正箇所 2：データを "station" ではなく "team" を渡す ▼▼▼
-  // ▼▼▼ 修正箇所 3：ファイル名を "db1" ではなく "F1" (作成したEJSファイル名) にする ▼▼▼
+
   res.render('TD', { data: pare });
 });
 app.listen(8080, () => console.log("Example app listening on port 8080!"));

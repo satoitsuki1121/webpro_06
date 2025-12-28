@@ -1,0 +1,94 @@
+\documentclass[uplatex,dvipdfmx,a4paper,11pt]{jlreq}
+\usepackage[utf8]{inputenc}
+\usepackage{url}
+\usepackage{geometry}
+\usepackage{enumerate}
+\usepackage{listings}
+\usepackage{color}
+
+\lstset{
+    language=JavaScript,
+    basicstyle=\ttfamily\small,
+    keywordstyle=\color{blue},
+    stringstyle=\color{red},
+    commentstyle=\color{green},
+    frame=single,
+    breaklines=true,
+}
+
+\geometry{left=25mm,right=25mm,top=30mm,bottom=30mm}
+
+\title{開発者向け仕様書：周年パレードシステム}
+\author{25G1058 佐藤 樹}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{システム概要}
+本プログラムは，東京ディズニーランドの歴代周年パレード情報を管理するためのWebアプリケーションです．Expressによるサーバサイド処理とEJSテンプレートを組み合わせ，データの動的な表示と追加機能を実現しています．
+
+\section{データ構造}
+データはサーバ側の変数 \texttt{pare}（オブジェクト配列）に格納されます．
+\begin{itemize}
+    \item \textbf{id}: 登場順を示す数値．
+    \item \textbf{code}: 何周年記念かを示す文字列．
+    \item \textbf{name}: パレード名を示す文字列．
+    \item \textbf{image}: 画像ファイルへのパス（\texttt{public/}配下）．
+\end{itemize}
+
+\section{リソースと機能詳細}
+本システムは，以下のHTTPメソッドとリソース名を用いて操作を定義しています．
+\begin{table}[h]
+\centering
+\begin{tabular}{|l|l|l|l|}
+\hline
+機能 & HTTPメソッド & リソース名 & 処理内容 \\ \hline
+一覧表示 & GET & \texttt{/TD} & 全データの抽出と一覧表示 \\ \hline
+データ追加 & GET & \texttt{/TD\_add} & クエリパラメータを用いた新規登録 \\ \hline
+データ削除 & DELETE (予定) & \texttt{/TD/:id} & 指定IDのデータ削除 \\ \hline
+データ編集 & PUT (予定) & \texttt{/TD/:id} & 指定IDのデータ更新 \\ \hline
+\end{tabular}
+\end{table}
+
+\section{ページ遷移と制御フロー}
+\subsection{遷移の仕組みとユーザー導線}
+利用者が \url{http://localhost:8080/TD} にアクセスすると一覧画面が描画されます．データの追加は \texttt{/TD\_add} を通じて行われます．周年名をクリックするなどのアクションにより，詳細情報の取得や画面遷移が発生する構造となっています．
+\subsection{操作後の表示内容}
+追加・変更・削除の各操作が完了した後は，サーバ側で一覧画面へ強制的に遷移させます．これにより，利用者は常に最新のデータ状態を確認することが可能です．
+
+\section{授業で説明していない技術の概要と採用理由}
+本システムの開発にあたり，講義資料の範囲外で採用した技術について以下に記します．
+
+\begin{enumerate}[1.]
+    \item \textbf{REST API（設計思想）}
+    \begin{itemize}
+        \item \textbf{概要}: URLを「リソース」として扱い，HTTPメソッドで操作を決定する設計手法です．
+        \item \textbf{採用理由}: 統一されたルールでURLを設計することで，プログラムの拡張性と保守性を向上させるため採用しました．
+    \end{itemize}
+    
+    \item \textbf{res.redirect()（リダイレクト機能）}
+    \begin{itemize}
+        \item \textbf{概要}: 処理完了後，サーバからブラウザに対して別のURLへ再アクセスするように指示を出す機能です．
+        \item \textbf{採用理由}: データ追加後にブラウザを自動で一覧画面へ戻し，ユーザーが直感的に操作を完了できるようにするため採用しました．
+    \end{itemize}
+
+    \item \textbf{express.static（静的ファイル配信設定）}
+    \begin{itemize}
+        \item \textbf{概要}: サーバ上の特定のフォルダ内のファイルを，外部から直接参照可能にするミドルウェアです．
+        \item \textbf{採用理由}: パレード写真などの画像資産をEJSテンプレートから確実に呼び出し，表示させるために採用しました．
+    \end{itemize}
+
+    \item \textbf{"use strict";（厳格モード）}
+    \begin{itemize}
+        \item \textbf{概要}: JavaScriptの記述ミスを厳格にチェックし，エラーとして報告させる宣言です．
+        \item \textbf{採用理由}: バグの発生を抑制し，コードの品質と実行時の安全性を高めるために採用しました．
+    \end{itemize}
+\end{enumerate}
+
+\section{ソースコードの管理}
+本システムのソースコードは，以下のGitHubリポジトリで管理しています．\\
+\url{https://github.com/satoitsuki1121/webpro_06.git}
+
+\end{document}
